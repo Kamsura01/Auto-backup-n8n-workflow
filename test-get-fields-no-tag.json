@@ -1,0 +1,140 @@
+{
+  "id": "B1V9ClY0BsveTe71",
+  "name": "test get fields",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-09T10:03:51.298Z",
+  "updatedAt": "2026-11-10T03:20:01.815Z",
+  "isArchived": false,
+  "versionId": "e68d8d97-8e8d-4f2d-85f5-957b2d2f5c4e",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -32
+      ],
+      "id": "c4bdf0a9-ed42-4be1-a15f-553f10c65971",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople"
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "0317ca41-8e24-4918-9da5-41c707aec4f6",
+      "name": "Customer Datastore (n8n training)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c5bb865f-4df9-4b25-ae6d-5ae53f77f708",
+              "name": "customer_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "9406a85e-7572-40cb-a7d8-ed6710af0e6f",
+              "name": "customer_name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "c3057a56-81f1-40e3-b21d-9db83f90512a",
+              "name": "customer_description",
+              "value": "={{ $json.notes }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        0,
+        -32
+      ],
+      "id": "418a1916-5c17-4428-82ea-fd5bd2ee24d0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "customerId": "={{ $json.customer_id }}",
+        "message": "=Hi {{ $json.customer_name }}. Your description is: {{ $json.customer_description }}"
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerMessenger",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "d22ad16a-2dfe-45e0-902f-c50e4a261993",
+      "name": "Customer Messenger (n8n training)"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore (n8n training)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Datastore (n8n training)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Customer Messenger (n8n training)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "B1V9ClY0BsveTe71",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-09T10:03:51.301Z",
+      "updatedAt": "2026-11-09T10:03:51.301Z"
+    }
+  ],
+  "activeVersion": null
+}
