@@ -1,0 +1,271 @@
+{
+  "id": "55akUwkuMkTZcPXz",
+  "name": "Sync DB & Google sheet",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-13T08:10:22.280Z",
+  "updatedAt": "2026-11-13T08:34:41.186Z",
+  "isArchived": false,
+  "versionId": "9fe76fdf-ffd6-4af1-8306-0f2c3c235459",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "id": "e04ee509-fc00-4481-959d-ccb973a120bc",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -48
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "a4f40bdf-3d87-473b-9603-3ebcfea8bcc9",
+      "name": "Select rows from a table",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [
+        48,
+        128
+      ],
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "products",
+          "mode": "list",
+          "cachedResultName": "products"
+        },
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "DSE5qdFwd2IAgIyc",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "id": "a2de8ad7-1f95-4ed5-a6e6-e77c87278279",
+      "name": "Get row(s) in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        -48
+      ],
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12ATxqW_5L-o42nidBzlE4O5ss3oHTsJXsNFPt_OJKKA",
+          "mode": "list",
+          "cachedResultName": "test_n8n_sync",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12ATxqW_5L-o42nidBzlE4O5ss3oHTsJXsNFPt_OJKKA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "ชีต1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12ATxqW_5L-o42nidBzlE4O5ss3oHTsJXsNFPt_OJKKA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FqHUoznCUoQxS2t3",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "id": "7f42023f-c4ce-472a-b0c2-41eb89e9467f",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        -48
+      ],
+      "parameters": {
+        "fieldToSplitOut": "name, price",
+        "options": {}
+      }
+    },
+    {
+      "id": "5550c1d7-035c-453c-8f3a-2c8ff93edc2e",
+      "name": "Compare Datasets",
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        272,
+        0
+      ],
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "name",
+              "field2": "name"
+            },
+            {
+              "field1": "price",
+              "field2": "price"
+            }
+          ]
+        },
+        "fuzzyCompare": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "22cf4e20-34ab-4e75-8f42-15a0f0073ba0",
+      "name": "Insert rows in a table",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [
+        496,
+        -16
+      ],
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "products",
+          "mode": "list",
+          "cachedResultName": "products"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "price": "={{ $json.price }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "credentials": {
+        "postgres": {
+          "id": "DSE5qdFwd2IAgIyc",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Compare Datasets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Datasets": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "55akUwkuMkTZcPXz",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-13T08:10:22.282Z",
+      "updatedAt": "2026-11-13T08:10:22.282Z"
+    }
+  ],
+  "activeVersion": null
+}
