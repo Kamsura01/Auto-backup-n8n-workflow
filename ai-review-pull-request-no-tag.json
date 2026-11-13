@@ -1,0 +1,559 @@
+{
+  "id": "wTnXdzsxMQzgRylv",
+  "name": "AI Review Pull Request",
+  "active": true,
+  "activeVersionId": "cb7a5006-9e77-411c-a877-ffb780bc18c2",
+  "createdAt": "2026-11-12T08:59:34.721Z",
+  "updatedAt": "2026-11-13T07:31:12.420Z",
+  "isArchived": false,
+  "versionId": "cb7a5006-9e77-411c-a877-ffb780bc18c2",
+  "triggerCount": 1,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/{{ $json.body.sender.login }}/{{ $json.body.repository.name }}/pulls/{{ $json.body.number }}/files",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -32,
+        16
+      ],
+      "id": "7f5fb13a-9a11-4cf3-8933-793e973e6823",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const files = $input.all().map(item => item.json);\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier: ${file.filename}\\n\\n`;\n\n  if(file.patch){\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  }else{\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `You are a senior IOS developer. \nPlease review the following code change in these files\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n- Generate inline comments on the relevant lines of code.\n- Ignore files without patches.\n- Do not repeat the code snippet or the filename.\n- Write the comments directly, without introducing the context.\n`;\n\nreturn [{\n  json:{ user_message: userMessage.trim() }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        16
+      ],
+      "id": "8aeed873-c529-45e5-bfa1-64ea619ddcc8",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_message }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        320,
+        16
+      ],
+      "id": "2a15c44b-3836-4e0d-a589-f91433bca67c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-5",
+          "cachedResultName": "Claude Sonnet 5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        320,
+        208
+      ],
+      "id": "60b2f513-dc7c-4292-90f8-e01c5f1a11f3",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "uz2KSbFzSidfziL3",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "review",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "e-docusign-demo",
+          "mode": "list",
+          "cachedResultName": "e-docusign-demo",
+          "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+        },
+        "pullRequestNumber": "={{ $('PR Trigger').first().json.body.number }}",
+        "event": "comment",
+        "body": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        16
+      ],
+      "id": "a4e438cc-c813-465a-ad07-0fc9b8e45ba6",
+      "name": "Create a review",
+      "webhookId": "e66af7de-1f2d-43cd-bfbd-aa9d67e78c90",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "e-docusign-demo",
+          "mode": "list",
+          "cachedResultName": "e-docusign-demo",
+          "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+        },
+        "events": [
+          "pull_request"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        16
+      ],
+      "id": "1327a252-8ed9-4d27-b91f-0569df131a9b",
+      "name": "PR Trigger",
+      "webhookId": "90e2edef-ec74-4d81-8d07-f3373499d92d",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "e-docusign-demo",
+          "mode": "list",
+          "cachedResultName": "e-docusign-demo",
+          "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+        },
+        "issueNumber": "={{ $('PR Trigger').first().json.body.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "ReviewByAI"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        16
+      ],
+      "id": "c689089d-496e-40cb-827d-2e15e749acc9",
+      "name": "Edit an issue",
+      "webhookId": "90a2a8cf-9852-4e1a-a0a0-e50071c9c4cc",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PR Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a review": {
+      "main": [
+        [
+          {
+            "node": "Edit an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Github Trigger": {},
+    "node:PR Trigger": {
+      "webhookId": 711202112,
+      "webhookEvents": [
+        "pull_request"
+      ],
+      "webhookSecret": "b77a0994b6be6d2abc8e58dd3fc8ae3851d16e4232aae76e642f6e641fe1d4cd"
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "wTnXdzsxMQzgRylv",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-12T08:59:34.725Z",
+      "updatedAt": "2026-11-12T08:59:34.725Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "cb7a5006-9e77-411c-a877-ffb780bc18c2",
+    "workflowId": "wTnXdzsxMQzgRylv",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "=https://api.github.com/repos/{{ $json.body.sender.login }}/{{ $json.body.repository.name }}/pulls/{{ $json.body.number }}/files",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.5,
+        "position": [
+          -32,
+          16
+        ],
+        "id": "7f5fb13a-9a11-4cf3-8933-793e973e6823",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "jsCode": "const files = $input.all().map(item => item.json);\nlet diffs = '';\n\nfor (const file of files) {\n  diffs += `### Fichier: ${file.filename}\\n\\n`;\n\n  if(file.patch){\n    const safePatch = file.patch.replace(/```/g, \"''\");\n\n    diffs += \"```diff\\n\";\n    diffs += safePatch;\n    diffs += \"\\n```\\n\";\n  }else{\n    diffs += \"_Pas de patch disponible (probablement fichier binaire)._\";\n  }\n\n  diffs += \"\\n---\\n\\n\";\n}\n\nconst userMessage = `You are a senior IOS developer. \nPlease review the following code change in these files\n\n${diffs}\n\n---\n\nYour mission:\n\n- Review the proposed code changes file by file and by significant modification.\n- Generate inline comments on the relevant lines of code.\n- Ignore files without patches.\n- Do not repeat the code snippet or the filename.\n- Write the comments directly, without introducing the context.\n`;\n\nreturn [{\n  json:{ user_message: userMessage.trim() }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          144,
+          16
+        ],
+        "id": "8aeed873-c529-45e5-bfa1-64ea619ddcc8",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.user_message }}",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          320,
+          16
+        ],
+        "id": "2a15c44b-3836-4e0d-a589-f91433bca67c",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "claude-sonnet-5",
+            "cachedResultName": "Claude Sonnet 5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.6,
+        "position": [
+          320,
+          208
+        ],
+        "id": "60b2f513-dc7c-4292-90f8-e01c5f1a11f3",
+        "name": "Anthropic Chat Model",
+        "credentials": {
+          "anthropicApi": {
+            "id": "uz2KSbFzSidfziL3",
+            "name": "Anthropic account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "review",
+          "owner": {
+            "__rl": true,
+            "value": "Kamsura01",
+            "mode": "list",
+            "cachedResultName": "Kamsura01",
+            "cachedResultUrl": "https://github.com/Kamsura01"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "e-docusign-demo",
+            "mode": "list",
+            "cachedResultName": "e-docusign-demo",
+            "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+          },
+          "pullRequestNumber": "={{ $('PR Trigger').first().json.body.number }}",
+          "event": "comment",
+          "body": "={{ $('AI Agent').item.json.output }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          608,
+          16
+        ],
+        "id": "a4e438cc-c813-465a-ad07-0fc9b8e45ba6",
+        "name": "Create a review",
+        "webhookId": "e66af7de-1f2d-43cd-bfbd-aa9d67e78c90",
+        "credentials": {
+          "githubApi": {
+            "id": "kjUJL19y8X8KUTUc",
+            "name": "GitHub account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "owner": {
+            "__rl": true,
+            "value": "Kamsura01",
+            "mode": "list",
+            "cachedResultName": "Kamsura01",
+            "cachedResultUrl": "https://github.com/Kamsura01"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "e-docusign-demo",
+            "mode": "list",
+            "cachedResultName": "e-docusign-demo",
+            "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+          },
+          "events": [
+            "pull_request"
+          ],
+          "options": {}
+        },
+        "type": "n8n-nodes-base.githubTrigger",
+        "typeVersion": 1,
+        "position": [
+          -208,
+          16
+        ],
+        "id": "1327a252-8ed9-4d27-b91f-0569df131a9b",
+        "name": "PR Trigger",
+        "webhookId": "90e2edef-ec74-4d81-8d07-f3373499d92d",
+        "credentials": {
+          "githubApi": {
+            "id": "kjUJL19y8X8KUTUc",
+            "name": "GitHub account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "edit",
+          "owner": {
+            "__rl": true,
+            "value": "Kamsura01",
+            "mode": "list",
+            "cachedResultName": "Kamsura01",
+            "cachedResultUrl": "https://github.com/Kamsura01"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "e-docusign-demo",
+            "mode": "list",
+            "cachedResultName": "e-docusign-demo",
+            "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+          },
+          "issueNumber": "={{ $('PR Trigger').first().json.body.number }}",
+          "editFields": {
+            "labels": [
+              {
+                "label": "ReviewByAI"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          768,
+          16
+        ],
+        "id": "c689089d-496e-40cb-827d-2e15e749acc9",
+        "name": "Edit an issue",
+        "webhookId": "90a2a8cf-9852-4e1a-a0a0-e50071c9c4cc",
+        "credentials": {
+          "githubApi": {
+            "id": "kjUJL19y8X8KUTUc",
+            "name": "GitHub account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Anthropic Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Create a review",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PR Trigger": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a review": {
+        "main": [
+          [
+            {
+              "node": "Edit an issue",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Nattapong Kamsura",
+    "name": "Version cb7a500610",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-11-13T07:31:12.421Z",
+    "updatedAt": "2026-11-13T07:32:15.000Z"
+  }
+}
