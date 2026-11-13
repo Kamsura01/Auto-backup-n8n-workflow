@@ -1,0 +1,180 @@
+{
+  "id": "UQe5IpyLHAqyU5Im",
+  "name": "test condition if",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-09T10:28:32.882Z",
+  "updatedAt": "2026-11-10T03:20:13.870Z",
+  "isArchived": false,
+  "versionId": "aa3efbee-63ef-4785-b799-4b307e0f0e8c",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10,
+              "triggerAtMinute": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -656,
+        -48
+      ],
+      "id": "7396bf39-05af-4b86-ab07-844d905108fd",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople"
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        -48
+      ],
+      "id": "6730f369-9b7e-437e-843e-a0b88dd8d2b4",
+      "name": "Customer Datastore (n8n training)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "c56e2498-6faf-47f9-ad66-085b2c51277a",
+              "leftValue": "={{ $json.country }}",
+              "rightValue": "CO",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -208,
+        -48
+      ],
+      "id": "f19091c4-8897-4d97-97d7-49744630bb26",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "request",
+        "operation": "send",
+        "binId": "1794221916931-9296500133350",
+        "binContent": "=There was a notes: {{ $json.notes }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.postBin",
+      "typeVersion": 1,
+      "position": [
+        16,
+        32
+      ],
+      "id": "595c4803-24a0-4d99-9de9-0be5e7eb3a02",
+      "name": "PostBin (Else)"
+    },
+    {
+      "parameters": {
+        "resource": "request",
+        "operation": "send",
+        "binId": "1794221703462-8610249569173",
+        "binContent": "=There was a notes: {{ $json.notes }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.postBin",
+      "typeVersion": 1,
+      "position": [
+        16,
+        -160
+      ],
+      "id": "2e13c176-0ce6-4404-9d08-355065206dbd",
+      "name": "PostBin (True)"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore (n8n training)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Datastore (n8n training)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "PostBin (True)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PostBin (Else)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Bangkok",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "UQe5IpyLHAqyU5Im",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-09T10:28:32.884Z",
+      "updatedAt": "2026-11-09T10:28:32.884Z"
+    }
+  ],
+  "activeVersion": null
+}
