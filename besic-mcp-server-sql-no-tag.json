@@ -1,0 +1,253 @@
+{
+  "id": "vrZsmOv6IYX5kBLO",
+  "name": "Besic MCP Server SQL",
+  "active": true,
+  "activeVersionId": "2632a8fa-a22b-4e58-9335-22fe383cf247",
+  "createdAt": "2026-11-10T10:35:27.903Z",
+  "updatedAt": "2026-11-10T11:21:07.272Z",
+  "isArchived": false,
+  "versionId": "2632a8fa-a22b-4e58-9335-22fe383cf247",
+  "triggerCount": 1,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        -480,
+        -160
+      ],
+      "id": "34f85b3f-2f3a-4692-a960-823ea9a09807",
+      "name": "MCP Server Trigger",
+      "webhookId": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "products"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id', ``, 'number') }}",
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+            "price": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('price', ``, 'number') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.8,
+      "position": [
+        -400,
+        48
+      ],
+      "id": "1613a41f-59ea-4af4-88d0-0b763135951f",
+      "name": "Insert rows in a table in Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "DSE5qdFwd2IAgIyc",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Insert rows in a table in Postgres": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "vrZsmOv6IYX5kBLO",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-10T10:35:27.906Z",
+      "updatedAt": "2026-11-10T10:35:27.906Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "2632a8fa-a22b-4e58-9335-22fe383cf247",
+    "workflowId": "vrZsmOv6IYX5kBLO",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+        },
+        "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+        "typeVersion": 2.1,
+        "position": [
+          -480,
+          -160
+        ],
+        "id": "34f85b3f-2f3a-4692-a960-823ea9a09807",
+        "name": "MCP Server Trigger",
+        "webhookId": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "mode": "list",
+            "value": "products"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id', ``, 'number') }}",
+              "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+              "price": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('price', ``, 'number') }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": true,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "price",
+                "displayName": "price",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.8,
+        "position": [
+          -400,
+          48
+        ],
+        "id": "1613a41f-59ea-4af4-88d0-0b763135951f",
+        "name": "Insert rows in a table in Postgres",
+        "credentials": {
+          "postgres": {
+            "id": "DSE5qdFwd2IAgIyc",
+            "name": "Postgres account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Insert rows in a table in Postgres": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "ณัฐพงษ์ คำสุระ",
+    "name": "Version 2632a8fa",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-11-10T11:16:31.992Z",
+    "updatedAt": "2026-11-10T11:20:53.000Z"
+  }
+}
