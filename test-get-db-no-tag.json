@@ -1,0 +1,161 @@
+{
+  "id": "CL3WvBkXwWfem5OV",
+  "name": "test get db",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-09T09:54:54.503Z",
+  "updatedAt": "2026-11-10T03:19:38.233Z",
+  "isArchived": false,
+  "versionId": "ee5084d6-1375-4460-b081-bfe3b2b8fab1",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAllPeople",
+        "returnAll": true
+      },
+      "id": "0d849a7f-8c3c-4eea-a2c0-8f4667e5942a",
+      "name": "Customer Datastore",
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "position": [
+        160,
+        176
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## About the very quick quickstart workflow\n\nThis is an incomplete workflow, used in the [very quick quickstart](https://docs.n8n.io//try-it-out/quickstart/) tutorial.",
+        "height": 220,
+        "width": 300
+      },
+      "id": "bb383855-509e-471a-8fb1-c344564944c8",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -384,
+        -112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Get fake sample data**",
+        "height": 300,
+        "width": 220
+      },
+      "id": "20d8bdd7-9e0f-481a-adba-f8f3529e8233",
+      "name": "Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        96,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Extract data and prepare it for use in the next node**",
+        "height": 300,
+        "width": 220
+      },
+      "id": "5c88fa50-8aad-4d9c-9f58-e0a32256a509",
+      "name": "Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "669ffa24-b405-4b1f-9418-a663a20c823f",
+      "name": "When clicking \"Test Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -80,
+        176
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df041e3c-fc09-4ba2-8e6b-37f2c6a02526",
+              "name": "customer_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "bf288953-4fef-4f55-a45f-c223714919c0",
+              "name": "customer_name",
+              "type": "string",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "id": "1cff0b21-6740-4697-9d2c-9bcb045af0be",
+              "name": "customer_description",
+              "type": "string",
+              "value": "={{ $json.notes }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7fbf06b0-0b49-4d9d-b101-670befce20d1",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        448,
+        176
+      ],
+      "typeVersion": 3.3
+    }
+  ],
+  "connections": {
+    "Customer Datastore": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {},
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "CL3WvBkXwWfem5OV",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-09T09:54:54.505Z",
+      "updatedAt": "2026-11-09T09:54:54.505Z"
+    }
+  ],
+  "activeVersion": null
+}
