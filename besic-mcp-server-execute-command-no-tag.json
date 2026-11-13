@@ -1,0 +1,126 @@
+{
+  "id": "IgAsy3umJ1qaaEYv",
+  "name": "Besic MCP Server Execute Command",
+  "active": true,
+  "activeVersionId": "2ff7a248-ae56-4e65-8d3d-7ee03d0cbb1f",
+  "createdAt": "2026-11-11T06:07:17.274Z",
+  "updatedAt": "2026-11-11T06:54:00.423Z",
+  "isArchived": false,
+  "versionId": "2ff7a248-ae56-4e65-8d3d-7ee03d0cbb1f",
+  "triggerCount": 1,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "6ba560a3-56e6-4804-bec2-6ad3233fefd8"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        -80
+      ],
+      "id": "b0b05a5c-ece6-4b41-aa4a-eaa471c66ece",
+      "name": "MCP Server Trigger",
+      "webhookId": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+    },
+    {
+      "parameters": {
+        "executeOnce": "",
+        "command": "cd /Users/nattapongkamsura/Project/Test_n8n/testgit\ngit diff --cached"
+      },
+      "type": "n8n-nodes-base.executeCommandTool",
+      "typeVersion": 1,
+      "position": [
+        112,
+        112
+      ],
+      "id": "77ae09a4-c04a-45bd-92a6-f0d655943992",
+      "name": "Execute Command"
+    }
+  ],
+  "connections": {
+    "Execute Command": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "IgAsy3umJ1qaaEYv",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-11T06:07:17.278Z",
+      "updatedAt": "2026-11-11T06:07:17.278Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "2ff7a248-ae56-4e65-8d3d-7ee03d0cbb1f",
+    "workflowId": "IgAsy3umJ1qaaEYv",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "6ba560a3-56e6-4804-bec2-6ad3233fefd8"
+        },
+        "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+        "typeVersion": 2.1,
+        "position": [
+          -32,
+          -80
+        ],
+        "id": "b0b05a5c-ece6-4b41-aa4a-eaa471c66ece",
+        "name": "MCP Server Trigger",
+        "webhookId": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+      },
+      {
+        "parameters": {
+          "executeOnce": "",
+          "command": "cd /Users/nattapongkamsura/Project/Test_n8n/testgit\ngit diff --cached"
+        },
+        "type": "n8n-nodes-base.executeCommandTool",
+        "typeVersion": 1,
+        "position": [
+          112,
+          112
+        ],
+        "id": "77ae09a4-c04a-45bd-92a6-f0d655943992",
+        "name": "Execute Command"
+      }
+    ],
+    "connections": {
+      "Execute Command": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "ณัฐพงษ์ คำสุระ",
+    "name": "Version 2ff7a248",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-11-11T06:54:00.425Z",
+    "updatedAt": "2026-11-11T06:54:09.000Z"
+  }
+}
