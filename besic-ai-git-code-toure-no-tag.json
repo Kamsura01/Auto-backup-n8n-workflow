@@ -1,0 +1,158 @@
+{
+  "id": "1zkNNBh7U0qCaLXX",
+  "name": "Besic AI Git Code Toure",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-11T07:11:20.390Z",
+  "updatedAt": "2026-11-11T08:40:35.504Z",
+  "isArchived": false,
+  "versionId": "505e315a-7c7d-4a8e-8376-df83c49a3bf7",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "id": "d632b0b7-320c-406f-8a78-0abedd9da354",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -144,
+        -80
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookId": "f1ffa932-a8b6-400a-9ee1-f9a8501d3c96"
+    },
+    {
+      "id": "e94ddab5-ce88-4e19-9f16-785098ac61e7",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        -80
+      ],
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the professional of devops engineer\n\nYou have knowlage about development program"
+        }
+      }
+    },
+    {
+      "id": "4b20978f-43e0-428e-949a-1cafe9427b8a",
+      "name": "Anthropic Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        -96,
+        96
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-5",
+          "cachedResultName": "Claude Sonnet 5"
+        },
+        "options": {}
+      },
+      "credentials": {
+        "anthropicApi": {
+          "id": "uz2KSbFzSidfziL3",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "id": "90739665-33ac-43e4-af84-b4c92e0a2061",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        32,
+        96
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "9479be44-3451-47e4-9864-753ef67b91b0",
+      "name": "MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        144,
+        96
+      ],
+      "parameters": {
+        "endpointUrl": "http://localhost:5678/mcp/6ba560a3-56e6-4804-bec2-6ad3233fefd9",
+        "serverTransport": "sse",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": null,
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "1zkNNBh7U0qCaLXX",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-11T07:11:20.392Z",
+      "updatedAt": "2026-11-11T07:11:20.392Z"
+    }
+  ],
+  "activeVersion": null
+}
