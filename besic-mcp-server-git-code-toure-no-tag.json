@@ -1,0 +1,266 @@
+{
+  "id": "cTim84JrAjWojqVp",
+  "name": "Besic MCP Server Git Code Toure",
+  "active": true,
+  "activeVersionId": "87a08ab8-ecf5-4423-9dc4-7a19ecd552b9",
+  "createdAt": "2026-11-11T07:23:58.256Z",
+  "updatedAt": "2026-11-11T08:35:29.154Z",
+  "isArchived": false,
+  "versionId": "87a08ab8-ecf5-4423-9dc4-7a19ecd552b9",
+  "triggerCount": 1,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "6ba560a3-56e6-4804-bec2-6ad3233fefd9"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        -80
+      ],
+      "id": "ba221cc9-0dbd-4556-b084-5d27b48d4663",
+      "name": "MCP Server Trigger",
+      "webhookId": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "e-docusign-demo",
+          "mode": "list",
+          "cachedResultName": "e-docusign-demo",
+          "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        128
+      ],
+      "id": "3842a07d-0c52-4278-996f-406ec85c70db",
+      "name": "List files in GitHub",
+      "webhookId": "618da723-01af-44f3-9c33-793d2ffd8c51",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "e-docusign-demo",
+          "mode": "list",
+          "cachedResultName": "e-docusign-demo",
+          "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+        },
+        "filePath": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File_Path', ``, 'string') }}",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        128
+      ],
+      "id": "b0ce399e-8898-4cd7-85ac-1ece221d470a",
+      "name": "Get a file in GitHub",
+      "webhookId": "c1f5952f-873e-4930-a4fb-e5090ba7b47d",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "List files in GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file in GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "cTim84JrAjWojqVp",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-11T07:23:58.259Z",
+      "updatedAt": "2026-11-11T07:23:58.259Z"
+    }
+  ],
+  "activeVersion": {
+    "versionId": "87a08ab8-ecf5-4423-9dc4-7a19ecd552b9",
+    "workflowId": "cTim84JrAjWojqVp",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "6ba560a3-56e6-4804-bec2-6ad3233fefd9"
+        },
+        "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+        "typeVersion": 2.1,
+        "position": [
+          -64,
+          -80
+        ],
+        "id": "ba221cc9-0dbd-4556-b084-5d27b48d4663",
+        "name": "MCP Server Trigger",
+        "webhookId": "6ba560a3-56e6-4804-bec2-6ad3233fefd7"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "list",
+          "owner": {
+            "__rl": true,
+            "value": "Kamsura01",
+            "mode": "list",
+            "cachedResultName": "Kamsura01",
+            "cachedResultUrl": "https://github.com/Kamsura01"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "e-docusign-demo",
+            "mode": "list",
+            "cachedResultName": "e-docusign-demo",
+            "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+          }
+        },
+        "type": "n8n-nodes-base.githubTool",
+        "typeVersion": 1.1,
+        "position": [
+          -16,
+          128
+        ],
+        "id": "3842a07d-0c52-4278-996f-406ec85c70db",
+        "name": "List files in GitHub",
+        "webhookId": "618da723-01af-44f3-9c33-793d2ffd8c51",
+        "credentials": {
+          "githubApi": {
+            "id": "kjUJL19y8X8KUTUc",
+            "name": "GitHub account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "get",
+          "owner": {
+            "__rl": true,
+            "value": "Kamsura01",
+            "mode": "list",
+            "cachedResultName": "Kamsura01",
+            "cachedResultUrl": "https://github.com/Kamsura01"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "e-docusign-demo",
+            "mode": "list",
+            "cachedResultName": "e-docusign-demo",
+            "cachedResultUrl": "https://github.com/Kamsura01/e-docusign-demo"
+          },
+          "filePath": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File_Path', ``, 'string') }}",
+          "additionalParameters": {}
+        },
+        "type": "n8n-nodes-base.githubTool",
+        "typeVersion": 1.1,
+        "position": [
+          176,
+          128
+        ],
+        "id": "b0ce399e-8898-4cd7-85ac-1ece221d470a",
+        "name": "Get a file in GitHub",
+        "webhookId": "c1f5952f-873e-4930-a4fb-e5090ba7b47d",
+        "credentials": {
+          "githubApi": {
+            "id": "kjUJL19y8X8KUTUc",
+            "name": "GitHub account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "List files in GitHub": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a file in GitHub": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "ณัฐพงษ์ คำสุระ",
+    "name": "Version 87a08ab9",
+    "description": "",
+    "autosaved": true,
+    "createdAt": "2026-11-11T08:35:29.155Z",
+    "updatedAt": "2026-11-11T08:35:39.000Z"
+  }
+}
