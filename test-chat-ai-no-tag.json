@@ -1,0 +1,139 @@
+{
+  "id": "bfX7rZA3pITo72Rr",
+  "name": "test chat ai",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-10T03:20:29.418Z",
+  "updatedAt": "2026-11-10T07:03:08.795Z",
+  "isArchived": false,
+  "versionId": "c904e196-90a6-4db0-a56f-58d83f628c02",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -752,
+        -96
+      ],
+      "id": "482df0fd-f780-4915-9e04-09af82ba9632",
+      "name": "When chat message received",
+      "webhookId": "e59f1123-dfb1-42aa-8e2b-d2798ef4a93b"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "ให้คุณเป็น Senior DevOps ที่ต้องคอยวิเคราะห์ปัญหา หาสาเหตุ และให้แนวทางการแก้ไขอย่างเหมาะสม"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -528,
+        -96
+      ],
+      "id": "c801f86e-c31c-405a-acd9-a8a5ac059daa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-5-5",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 5.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        -528,
+        96
+      ],
+      "id": "db800072-d5fb-43e9-a236-4e5ab3fc8c60",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "uz2KSbFzSidfziL3",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -432,
+        208
+      ],
+      "id": "57c8ac04-3f3a-4a3b-b9c8-082d214cec1a",
+      "name": "Simple Memory"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "bfX7rZA3pITo72Rr",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-10T03:20:29.418Z",
+      "updatedAt": "2026-11-10T03:20:29.418Z"
+    }
+  ],
+  "activeVersion": null
+}
