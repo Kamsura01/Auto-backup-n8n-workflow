@@ -1,0 +1,171 @@
+{
+  "id": "bFL1DTYPwovScYEE",
+  "name": "Discord Bot Summary",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-11T08:36:03.715Z",
+  "updatedAt": "2026-11-12T02:55:09.134Z",
+  "isArchived": false,
+  "versionId": "df8ac5ba-d873-465e-a563-5ea4867fc6ab",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "id": "c557ffd7-41ca-448f-88de-712e88cd0118",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -96
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "4100be5e-5441-442e-97a1-84d2ec8166c6",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -144,
+        -96
+      ],
+      "parameters": {
+        "url": "https://unbundle-asparagus-curator.ngrok-free.dev/fetch-messages",
+        "options": {}
+      }
+    },
+    {
+      "id": "39fc6aea-c441-448a-8bde-46912e8196b3",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        -96
+      ],
+      "parameters": {
+        "promptType": "define",
+        "text": "=ข้อมูลด้านล่างนี้ คือข้อมูลการพูดคุยใน Text Channel ทำงานของแผนกหนึ่งในดิสคอร์ด ช่วยดูจากรายชื่อผู้ส่งว่าส่งมาจากใคร และคนที่ส่งนั้นพบเจอปัญหาอะไรบ้างในแต่ละวัน โดยสรุปมาว่าแต่ละคนเจอปัญหาอะไรบ้าง และปัญหาเรื่องอะไรเจอบ่อยที่สุด ควรจะแก้ไขอย่างไร\n\n{{ JSON.stringify($('HTTP Request').all().map(i => i.json), null, 2).slice(0, 3000) }}",
+        "options": {
+          "systemMessage": "ตอบให้กระชับ ความยาวรวมไม่เกิน 1800 ตัวอักษร (ข้อจำกัดของ Discord) และไม่ต้องขอข้อมูลเพิ่ม"
+        }
+      }
+    },
+    {
+      "id": "f00c6ee2-32a4-4b7e-b68b-0766fd9674ba",
+      "name": "Anthropic Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        80,
+        112
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-5",
+          "cachedResultName": "Claude Sonnet 5"
+        },
+        "options": {}
+      },
+      "credentials": {
+        "anthropicApi": {
+          "id": "uz2KSbFzSidfziL3",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "id": "6d2d41d5-53f4-449e-9ea6-024114e195a8",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        -96
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://unbundle-asparagus-curator.ngrok-free.dev/summary-task",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "={{ $json.keys()[0] }}",
+              "value": "={{ String($json.output).slice(0, 1900) }}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "bFL1DTYPwovScYEE",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-11T08:36:03.718Z",
+      "updatedAt": "2026-11-11T08:36:03.718Z"
+    }
+  ],
+  "activeVersion": null
+}
