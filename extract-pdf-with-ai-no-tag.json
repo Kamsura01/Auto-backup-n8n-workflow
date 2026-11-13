@@ -1,0 +1,194 @@
+{
+  "id": "XRwtqCW3p7xH6ft5",
+  "name": "Extract PDF With AI",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-13T07:44:59.153Z",
+  "updatedAt": "2026-11-13T08:09:27.424Z",
+  "isArchived": false,
+  "versionId": "d2c5bfeb-4401-4fc2-a4b6-0f524fa81b4f",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -32
+      ],
+      "id": "f3d6d706-fad1-4ad2-9166-a1b2e1af218d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1QzfFTj0qMLJ1Z2ejK31FaXD4rMM0J-QS",
+          "mode": "list",
+          "cachedResultName": "Resume_Nattapong_Kamsura (1).pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1QzfFTj0qMLJ1Z2ejK31FaXD4rMM0J-QS/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "6bdae445-6f8f-4fcd-9151-4d5e8ad4759f",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lpnzgKdAk4Gw6UnC",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        -32
+      ],
+      "id": "9a579bbb-dd45-488f-a65e-6b4f214fd629",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-6\",\n  \"max_tokens\": 1024,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": [{\n      \"type\": \"document\",\n      \"source\": {\n        \"type\": \"base64\",\n        \"media_type\": \"application/pdf\",\n        \"data\": \"{{ $json.data }}\"\n      }\n    },\n    {\n      \"type\": \"text\",\n      \"text\": \"{{ $('Define Prompt').item.json.prompt }}\"\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        208,
+        -32
+      ],
+      "id": "04b1081f-5593-4788-860e-fc1042c50de4",
+      "name": "HTTP Request",
+      "credentials": {
+        "anthropicApi": {
+          "id": "uz2KSbFzSidfziL3",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "20302a01-d3b4-4da9-b142-42f9594be423",
+              "name": "prompt",
+              "value": "สรุป pdf นี้ให้หน่อย",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -288,
+        -32
+      ],
+      "id": "7c7d4b50-77e2-402a-860c-bae72f921523",
+      "name": "Define Prompt"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Define Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Define Prompt": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "XRwtqCW3p7xH6ft5",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-13T07:44:59.156Z",
+      "updatedAt": "2026-11-13T07:44:59.156Z"
+    }
+  ],
+  "activeVersion": null
+}
