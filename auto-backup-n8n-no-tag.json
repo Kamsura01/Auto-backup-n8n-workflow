@@ -1,0 +1,386 @@
+{
+  "id": "Lu8NO7GLCMlrevjd",
+  "name": "Auto Backup n8n",
+  "active": false,
+  "activeVersionId": null,
+  "createdAt": "2026-11-13T08:41:59.049Z",
+  "updatedAt": "2026-11-13T09:26:14.645Z",
+  "isArchived": false,
+  "versionId": "f05a7967-decc-4314-b57d-dfa0c19a8bad",
+  "triggerCount": 0,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -736,
+        -336
+      ],
+      "id": "986228ef-7da4-4b20-bdf8-3852b3e1a232",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Auto-backup-n8n-workflow",
+          "mode": "list",
+          "cachedResultName": "Auto-backup-n8n-workflow",
+          "cachedResultUrl": "https://github.com/Kamsura01/Auto-backup-n8n-workflow"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        -576,
+        -336
+      ],
+      "id": "56110f0e-1088-4603-a568-f3f17df2d44e",
+      "name": "List files",
+      "webhookId": "143f2496-99ca-42d4-b704-24e16298c6ce",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -336
+      ],
+      "id": "90a26466-8b7d-4273-8ac2-807a14217f6a",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "mode": "each",
+        "options": {
+          "format": true
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        -336
+      ],
+      "id": "23c248e9-9656-4509-99c8-938592e47fae",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -336
+      ],
+      "id": "39eeee39-dcb1-4de7-aff4-d6499e253feb",
+      "name": "n8n",
+      "credentials": {
+        "n8nApi": {
+          "id": "ZeWn5DTA8w0Kx4rt",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "2023e0d4-00c0-44bf-ac28-17afd370722f",
+              "leftValue": "={{ $('Aggregate').item.json.name }}",
+              "rightValue": "={{ $('n8n').item.json.name.toLowerCase().replace(/[\\/\\\\:*?\"<>|#]/g, '').replace(/\\s+/g, '-') }}-{{ $('n8n').item.json.tags?.[0]?.name ?? 'no-tag' }}.json",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        384,
+        -336
+      ],
+      "id": "208a2fbc-200f-4d16-893c-7860562b985e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Auto-backup-n8n-workflow",
+          "mode": "list",
+          "cachedResultName": "Auto-backup-n8n-workflow",
+          "cachedResultUrl": "https://github.com/Kamsura01/Auto-backup-n8n-workflow"
+        },
+        "filePath": "={{ $('n8n').item.json.name.toLowerCase().replace(/[\\/\\\\:*?\"<>|#]/g, '').replace(/\\s+/g, '-') }}-{{ $('n8n').item.json.tags?.[0]?.name ?? 'no-tag' }}.json",
+        "fileContent": "={{ $('To Base64').item.json.data }}",
+        "commitMessage": "=backup-{{ $('Commit date & file name').item.json['Commit Date'] }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        -432
+      ],
+      "id": "785e68ba-9ed0-4b8c-83f1-99f43b3cd8d0",
+      "name": "Edit a file",
+      "webhookId": "3f672eb8-8903-4ff6-ac6f-992f0d00cb3e",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        -336
+      ],
+      "id": "7862b095-bf07-4ef3-8a67-c136e571e8ea",
+      "name": "To Base64"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60d58591-4327-4b96-9cbe-97ce4e570808",
+              "name": "Commit Date",
+              "value": "={{ $now.format('dd-MM-yyyy/HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "bc648428-9a69-42fd-b897-43c35838a4cb",
+              "name": "File Name",
+              "value": "={{ $('n8n').item.json.name.toLowerCase().replace(/[\\/\\\\:*?\"<>|#]/g, '').replace(/\\s+/g, '-') }}-{{ $('n8n').item.json.tags?.[0]?.name ?? 'no-tag' }}.json",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        -336
+      ],
+      "id": "5ffea1f9-69b5-4007-8660-5921ff2dbb06",
+      "name": "Commit date & file name"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "Kamsura01",
+          "mode": "list",
+          "cachedResultName": "Kamsura01",
+          "cachedResultUrl": "https://github.com/Kamsura01"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Auto-backup-n8n-workflow",
+          "mode": "list",
+          "cachedResultName": "Auto-backup-n8n-workflow",
+          "cachedResultUrl": "https://github.com/Kamsura01/Auto-backup-n8n-workflow"
+        },
+        "filePath": "={{ $('n8n').item.json.name.toLowerCase().replace(/[\\/\\\\:*?\"<>|#]/g, '').replace(/\\s+/g, '-') }}-{{ $('n8n').item.json.tags?.[0]?.name ?? 'no-tag' }}.json",
+        "fileContent": "={{ $('To Base64').item.json.data }}",
+        "commitMessage": "=backup-{{ $('Commit date & file name').item.json['Commit Date'] }}"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        -240
+      ],
+      "id": "b5455527-0cf9-49a5-82eb-850f415f48d0",
+      "name": "Create a file",
+      "webhookId": "3f672eb8-8903-4ff6-ac6f-992f0d00cb3e",
+      "credentials": {
+        "githubApi": {
+          "id": "kjUJL19y8X8KUTUc",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "List files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List files": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "n8n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "To Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "n8n": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "To Base64": {
+      "main": [
+        [
+          {
+            "node": "Commit date & file name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commit date & file name": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodeGroups": [],
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [],
+  "shared": [
+    {
+      "role": "workflow:owner",
+      "workflowId": "Lu8NO7GLCMlrevjd",
+      "projectId": "fYepB11AccNMQwRG",
+      "createdAt": "2026-11-13T08:41:59.060Z",
+      "updatedAt": "2026-11-13T08:41:59.060Z"
+    }
+  ],
+  "activeVersion": null
+}
